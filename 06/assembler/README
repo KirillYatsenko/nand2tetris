@@ -1,0 +1,7 @@
+Build:
+	make
+
+Usage:
+	./assembler <file_name>
+
+	The program will output result to the a.hack file
