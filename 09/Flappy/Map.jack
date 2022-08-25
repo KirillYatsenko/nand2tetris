@@ -1,0 +1,34 @@
+class Map {
+	static int seed;	// gap y position
+
+	/** Modulo operation. */
+	function int mod(int a, int b) { return a - (a / b * b); }
+
+	/** Generates random number between 'from' and 'to'. */
+	function int random(int from, int to) {
+		var int x, res;
+
+		let x = ((7490 * seed) + 16445);
+		let seed = Map.mod(x, 17980);
+
+		if (seed < 0) {
+			let seed = -seed;
+		}
+
+		return Map.mod(seed, (to - from)) + from;
+	}
+
+	/** Generates block with random gap position and size. */
+	function Block generateBlock() {
+		var int gapPos, gapSize;
+
+		if (seed = 0) {
+			let seed = 10;
+		}
+
+		let gapPos = Map.random(40, 130);
+		let gapSize = Map.random(60, 120);
+
+		return Block.new(gapPos, gapSize);
+	}
+}

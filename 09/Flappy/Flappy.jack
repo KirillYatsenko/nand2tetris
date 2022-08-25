@@ -1,0 +1,87 @@
+class Flappy {
+	field int x, y, size; // screen location of the square's top-left corner
+
+	constructor Flappy new () {
+		let size = 30;
+		let y = 100;
+		let x = 40;
+
+		// we should position flappy to the left center
+
+		do draw();
+		return this;
+	}
+
+	/** Disposes this flappy. */
+	method void dispose() {
+		do erase();
+		do Memory.deAlloc(this);
+
+		return;
+	}
+
+	/** Draws the flappy on the screen. */
+	method void draw() {
+		do Screen.setColor(true);
+
+		// for now it's just a rectnagle, bitmap will be added later
+		do Screen.drawRectangle(x, y, x + size, y + size);
+
+		return;
+	}
+
+	/** Erases the flappy from the screen. */
+	method void erase() {
+		do Screen.setColor(false);
+		do Screen.drawRectangle(x, y, x + size, y + size);
+		return;
+	}
+
+	/** Moves the flappy up by 2 pixels. */
+	method void moveUp() {
+		var int i;
+		let i = 30;
+
+		while (~(i = 0)) {
+			if (y > 1) {
+				do Screen.setColor(false);
+				do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size);
+				let y = y - 2;
+				do Screen.setColor(true);
+				do Screen.drawRectangle(x, y, x + size, y + 1);
+			}
+
+			let i = i - 1;
+		}
+
+		return;
+	}
+
+	/** Moves the flappy down by 2 pixels. */
+	method void moveDown() {
+		if ((y + size) < 254) {
+			do Screen.setColor(false);
+			do Screen.drawRectangle(x, y, x + size, y + 1);
+			let y = y + 2;
+			do Screen.setColor(true);
+			do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size);
+		}
+
+		return;
+	}
+
+	/** X getter */
+	method int getX() {
+		return x;
+	}
+
+	/** Y getter */
+	method int getY() {
+		return y;
+	}
+
+	/** Size getter */
+	method int getSize() {
+		return size;
+	}
+}

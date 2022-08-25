@@ -1,0 +1,155 @@
+class FlappyGame {
+	field int passed; // passed blocks
+	field Flappy flappy;
+
+	field Block block;
+	field Block block2;
+
+	constructor FlappyGame new () {
+		let flappy = Flappy.new();
+
+		let block = Map.generateBlock();
+		let block2 = null;
+
+		let passed = 0;
+
+		return this;
+	}
+
+	/** Disposes this game. */
+	method void dispose() {
+		do flappy.dispose();
+		do block.dispose();
+
+		if (~(block2 = null)) {
+			do block2.dispose();
+		}
+
+		do Memory.deAlloc(this);
+
+		return;
+	}
+
+	/** Move the block to the left */
+	method void moveBlock() {
+		do block.moveLeft();
+		if (block.isHidden()) {
+			do block.dispose();
+			if (block2 = null) { let block2 = Map.generateBlock(); }
+
+			let block = block2;
+			let block2 = Map.generateBlock();
+		}
+
+		if (block2 = null) { return; }
+
+		do block2.moveLeft();
+
+		if (block2.isHidden()) {
+			do block2.dispose();
+			let block2 = null;
+		}
+
+		return;
+	}
+
+	/** Draw second block is first block passed center */
+	method void drawSecondBlock() {
+		if (block.passedCenter() & (block2 = null)) {
+			let block2 = Map.generateBlock();
+		}
+
+		return;
+	}
+
+	/** Update passed counter */
+	method void updateStat() {
+		do Output.moveCursor(0, 0);
+		do Output.printInt(passed);
+
+		return;
+	}
+
+	/** Passed counter getter */
+	method int getStat() {
+		return passed;
+	}
+
+	/** Check if the flappy collided with the block */
+	method bool checkCollision() {
+		var bool topCollided, bottomCollided, passing;
+		let topCollided = false;
+		let bottomCollided = false;
+		let passing = false;
+
+		if ((flappy.getX() > block.getRight()) & ~block.getPassed()) {
+			if (~block.getPassed()) {
+				let passed = passed + 1;
+
+				do updateStat();
+				do block.setPassed();
+			}
+
+			return false;
+		}
+
+		if (block.getPassed()) {
+			return false;
+		}
+
+		let passing = (flappy.getX() + flappy.getSize()) > block.getX();
+		let bottomCollided = (flappy.getY() + flappy.getSize()) > block.getBottomY();
+		let topCollided = flappy.getY() < block.getTopY();
+
+		if (passing & (topCollided | bottomCollided)) {
+		     	return true;
+		}
+
+		return false;
+	}
+
+	/** Runs the game: handles the user's inputs and moves the flappy accordingly */
+	method bool run() {
+		var char key;  // the key currently pressed by the user
+		var boolean exit;
+		var int z;
+
+		let exit = false;
+
+		while (~exit) {
+			while (key = 0) {
+				let key = Keyboard.keyPressed();
+				do flappy.moveDown();
+				do moveBlock();
+
+				if (checkCollision()) {
+					return false;
+				}
+
+				do Sys.wait(7);  // delays the next movement
+
+				do drawSecondBlock();
+			}
+
+			let key = Keyboard.keyPressed();
+
+			if (key = 81)  { return true; }      // q key
+			if (key = 131) { do flappy.moveUp(); }   // up arrow
+
+			// waits for the key to be released
+			while (~(key = 0)) {
+				let key = Keyboard.keyPressed();
+				do moveBlock();
+
+				if (checkCollision()) {
+					return false;
+				}
+
+				do Sys.wait(5);
+				do drawSecondBlock();
+			}
+		}
+
+		return false;
+	}
+}

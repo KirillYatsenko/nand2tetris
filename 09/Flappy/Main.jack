@@ -1,0 +1,36 @@
+class Main {
+	/** Print the result score to the screen */
+	function void printResult(FlappyGame game) {
+		var int stat;
+		let stat = game.getStat();
+
+		do Output.moveCursor(10, 20);
+		do Output.printString("Result: ");
+		do Output.printInt(stat);
+
+		do Sys.wait(3000);
+		do Screen.clearScreen();
+
+		return;
+	}
+
+	function void main() {
+		var FlappyGame game;
+		var bool exited;
+		let exited = false;
+
+		while(~exited) {
+			let game = FlappyGame.new();
+			let exited = game.run();
+
+			// check if the user pressed 'q' key
+			if (~exited) {
+				do Main.printResult(game);
+			}
+
+			do game.dispose();
+		}
+
+		return;
+	}
+}

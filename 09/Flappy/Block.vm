@@ -1,0 +1,262 @@
+function Block.new 0
+push constant 9
+call Memory.alloc 1
+pop pointer 0
+push constant 490
+pop this 3
+push constant 20
+pop this 5
+push constant 0
+pop this 2
+push constant 0
+pop this 0
+push argument 0
+pop this 4
+push argument 1
+pop this 6
+push this 4
+pop this 7
+push this 4
+push this 6
+add
+pop this 8
+push constant 0
+pop this 1
+push pointer 0
+call Block.draw 1
+pop temp 0
+push pointer 0
+return
+function Block.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Block.erase 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function Block.draw 0
+push argument 0
+pop pointer 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push this 3
+push constant 0
+push this 3
+push this 5
+add
+push this 7
+call Screen.drawRectangle 4
+pop temp 0
+push this 3
+push this 8
+push this 3
+push this 5
+add
+push constant 255
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function Block.erase 0
+push argument 0
+pop pointer 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push this 3
+push constant 0
+push this 3
+push this 5
+add
+push this 7
+call Screen.drawRectangle 4
+pop temp 0
+push this 3
+push this 8
+push this 3
+push this 5
+add
+push constant 255
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function Block.isHidden 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Block.passedCenter 0
+push argument 0
+pop pointer 0
+push this 3
+push constant 205
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+return
+label IF_FALSE0
+push constant 0
+return
+function Block.moveLeft 0
+push argument 0
+pop pointer 0
+push this 0
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+return
+label IF_FALSE0
+push this 2
+push this 5
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push pointer 0
+call Block.erase 1
+pop temp 0
+push constant 0
+not
+pop this 0
+push constant 0
+return
+label IF_FALSE1
+push this 3
+push constant 0
+gt
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push this 3
+push this 5
+add
+push constant 1
+sub
+push constant 0
+push this 3
+push this 5
+add
+push this 7
+call Screen.drawRectangle 4
+pop temp 0
+push this 3
+push this 5
+add
+push constant 1
+sub
+push this 8
+push this 3
+push this 5
+add
+push constant 255
+call Screen.drawRectangle 4
+pop temp 0
+push this 3
+push constant 2
+sub
+pop this 3
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push this 3
+push constant 0
+push this 3
+push constant 1
+add
+push this 7
+call Screen.drawRectangle 4
+pop temp 0
+push this 3
+push this 8
+push this 3
+push constant 1
+add
+push constant 255
+call Screen.drawRectangle 4
+pop temp 0
+goto IF_END2
+label IF_FALSE2
+push this 2
+push constant 2
+add
+pop this 2
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push this 3
+push this 5
+add
+push this 2
+sub
+push constant 0
+push this 3
+push this 5
+add
+push this 7
+call Screen.drawRectangle 4
+pop temp 0
+push this 3
+push this 5
+add
+push this 2
+sub
+push this 8
+push this 3
+push this 5
+add
+push constant 255
+call Screen.drawRectangle 4
+pop temp 0
+label IF_END2
+push constant 0
+return
+function Block.getX 0
+push argument 0
+pop pointer 0
+push this 3
+return
+function Block.getTopY 0
+push argument 0
+pop pointer 0
+push this 7
+return
+function Block.getBottomY 0
+push argument 0
+pop pointer 0
+push this 8
+return
+function Block.getRight 0
+push argument 0
+pop pointer 0
+push this 3
+push this 5
+add
+return
+function Block.getPassed 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Block.setPassed 0
+push argument 0
+pop pointer 0
+push constant 0
+not
+pop this 1
+push constant 0
+return

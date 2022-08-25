@@ -1,0 +1,124 @@
+class Block {
+	field bool hidden;
+	field bool passed;
+	field int hide;
+	field int x, gap_y, width, gap_size;
+	field int y_top, y_bottom;
+
+	constructor Block new (int gapY, int gapSize) {
+		let x = 490;  // screen right corner
+		let width = 20;
+
+		// how much hide by the left border
+		let hide = 0;
+		let hidden = false;
+
+		// set gap position and size
+		let gap_y = gapY;
+		let gap_size = gapSize;
+
+		let y_top = gap_y;
+		let y_bottom = gap_y + gap_size;
+
+		let passed = false;
+
+		do draw();
+
+		return this;
+	}
+
+	/** Disposes this block. */
+	method void dispose() {
+		do erase();
+		do Memory.deAlloc(this);
+
+		return;
+	}
+
+	/** Draws the block on the screen. */
+	method void draw() {
+		do Screen.setColor(true);
+		do Screen.drawRectangle(x, 0, x + width, y_top);
+		do Screen.drawRectangle(x, y_bottom, x + width, 255);
+
+		return;
+	}
+
+	/** Erases the block from the screen. */
+	method void erase() {
+		do Screen.setColor(false);
+		do Screen.drawRectangle(x, 0, x + width, y_top);
+		do Screen.drawRectangle(x, y_bottom, x + width, 255);
+
+		return;
+	}
+
+	/** Check if block is hidden. */
+	method bool isHidden() {
+		return hidden;
+	}
+
+	/** Check if block is located in the left part of the screen. */
+	method bool passedCenter() {
+		if (x < 205) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/** Moves the square left by 2 pixels. */
+	method void moveLeft() {
+		if (hidden) { return; }
+		if (hide = width) { do erase(); let hidden = true; return; }
+
+		if (x > 0) {
+			do Screen.setColor(false);
+			do Screen.drawRectangle((x + width) - 1, 0, x + width, y_top);
+			do Screen.drawRectangle((x + width) - 1, y_bottom, x + width, 255);
+			let x = x - 2;
+			do Screen.setColor(true);
+			do Screen.drawRectangle(x, 0, x + 1, y_top);
+			do Screen.drawRectangle(x, y_bottom, x + 1, 255);
+		} else {
+			let hide = hide + 2;
+			do Screen.setColor(false);
+			do Screen.drawRectangle((x + width) - hide, 0, x + width, y_top);
+			do Screen.drawRectangle((x + width) - hide, y_bottom, x + width, 255);
+		}
+
+		return;
+   	}
+
+	/** X getter */
+	method int getX() {
+		return x;
+	}
+
+	/** Y_top getter */
+	method int getTopY() {
+		return y_top;
+	}
+
+	/** Y_bottom getter */
+	method int getBottomY() {
+		return y_bottom;
+	}
+
+	/** Get the right part(x) of the block */
+	method int getRight() {
+		return x + width;
+	}
+
+	/** Get passed flag */
+	method bool getPassed() {
+		return passed;
+	}
+
+	/** Set passed flag */
+	method void setPassed() {
+		let passed = true;
+		return;
+	}
+}
+
