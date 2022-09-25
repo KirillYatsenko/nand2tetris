@@ -16,7 +16,8 @@ enum kind {
 
 struct symbol {
 	const char *name;
-	enum token_t type;
+	const char *type;
+	const char *s_type;
 	enum kind kind;
 	int indx;
 	struct symbol *next;
@@ -35,14 +36,16 @@ void symbols_reset(struct symbols *symbols);
 
 void symbols_deinit(struct symbols *symbols);
 
-int symbols_define(struct symbols *symbols, const char *name, enum token_t type,
-		   enum kind kind);
+int symbols_define(struct symbols *symbols, const char *name,
+		   const char *type, enum kind kind);
 
 int symbols_var_count(struct symbols *symbols, enum kind kind);
 
 enum kind symbols_kind_of(struct symbols *symbols, const char *name);
 
-enum token_t symbols_type_of(struct symbols *symbols, const char *name);
+const char *symbols_type_of(struct symbols *symbols, const char *name);
+
+bool symbols_exist(struct symbols *symbols, const char *name);
 
 int symbols_index_of(struct symbols *symbols, const char *name);
 

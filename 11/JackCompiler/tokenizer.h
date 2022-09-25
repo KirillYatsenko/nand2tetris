@@ -46,7 +46,8 @@ enum token_t {
 	DOT,
 	COMMA,
 	SEMICOLON,
-	PLUS,
+	ADD,
+	NEG,
 	MINUS,
 	MULT,
 	DIV,
@@ -66,7 +67,7 @@ struct token {
 	const char *symbol;
 	union {
 		int integer;
-		char *identifier;
+		char *ident;
 		char *str;
 	};
 };

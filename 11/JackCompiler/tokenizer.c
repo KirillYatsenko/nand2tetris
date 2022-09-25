@@ -49,7 +49,7 @@ struct table_elem symbols[] = {
 	{ .key = ".",	.val = DOT,	 },
 	{ .key = ",",	.val = COMMA,	 },
 	{ .key = ";",	.val = SEMICOLON },
-	{ .key = "+",	.val = PLUS	 },
+	{ .key = "+",	.val = ADD	 },
 	{ .key = "-",	.val = MINUS	 },
 	{ .key = "*",	.val = MULT	 },
 	{ .key = "/",	.val = DIV	 },
@@ -142,7 +142,7 @@ static bool is_string(char **buf, char **str)
 static bool is_integer(char **buf, int *val)
 {
 	int i = 0;
-	char str[16];
+	char str[16] = "";
 
 	while (isdigit(**buf))
 		str[i++] = *((*buf)++);
@@ -156,12 +156,17 @@ static bool is_integer(char **buf, int *val)
 }
 
 static bool exists(struct table_elem elems[], size_t size, char **buf,
-		   const char **key, enum token_t *val)
+		   const char **key, enum token_t *val, bool is_keyword)
 {
 	size_t i;
 
 	for (i = 0; i < size; i++) {
+		char next;
 		if (strstr(*buf, elems[i].key) != *buf)
+			continue;
+
+		next = *(*buf + strlen(elems[i].key));
+		if (is_keyword && isalnum(next))
 			continue;
 
 		*val = elems[i].val;
@@ -177,13 +182,13 @@ static bool exists(struct table_elem elems[], size_t size, char **buf,
 static bool is_keyword(char **buf, const char **key, enum token_t *val)
 {
 	size_t size = sizeof(keywords) / sizeof(keywords[0]);
-	return exists(keywords, size, buf, key, val);
+	return exists(keywords, size, buf, key, val, true);
 }
 
 static bool is_symbol(char **buf, const char **key, enum token_t *val)
 {
 	size_t size = sizeof(symbols) / sizeof(symbols[0]);
-	return exists(symbols, size, buf, key, val);
+	return exists(symbols, size, buf, key, val, false);
 }
 
 static char *skip_spaces(char *buf)

@@ -16,7 +16,7 @@ static void free_symbols_list(struct symbols *symbols)
 
 	symbol = symbols->head;
 
-	while (!symbol) {
+	while (symbol) {
 		tmp = symbol->next;
 
 		free((void *)symbol->name);
@@ -50,12 +50,12 @@ void symbols_deinit(struct symbols *symbols)
 	free(symbols);
 }
 
-int symbols_define(struct symbols *symbols, const char *name, enum token_t type,
-		   enum kind kind)
+int symbols_define(struct symbols *symbols, const char *name,
+		   const char *type, enum kind kind)
 {
 	struct symbol *symbol;
 
-	if (!symbols || !name || kind == K_NONE)
+	if (!symbols || !name || kind == K_NONE || !type)
 		return -EINVAL;
 
 	symbol = calloc(1, sizeof(*symbol));
@@ -93,7 +93,7 @@ static struct symbol *find(struct symbols *symbols, const char *name)
 
 	symbol = symbols->head;
 
-	while (!symbol) {
+	while (symbol) {
 		if (!strcmp(symbol->name, name))
 			return symbol;
 
@@ -115,16 +115,24 @@ enum kind symbols_kind_of(struct symbols *symbols, const char *name)
 	return symbol ? symbol->kind : K_NONE;
 }
 
-enum token_t symbols_type_of(struct symbols *symbols, const char *name)
+const char *symbols_type_of(struct symbols *symbols, const char *name)
 {
 	struct symbol *symbol;
 
 	if (!symbols || !name)
-		return UNDEF;
+		return NULL;
 
 	symbol = find(symbols, name);
 
-	return symbol ? symbol->type : UNDEF;
+	return symbol ? symbol->type : NULL;
+}
+
+bool symbols_exist(struct symbols *symbols, const char *name)
+{
+	if (!symbols)
+		return NULL;
+
+	return find(symbols, name) != NULL;
 }
 
 int symbols_index_of(struct symbols *symbols, const char *name)

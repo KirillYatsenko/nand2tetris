@@ -83,18 +83,18 @@ int write_comment(struct writer *writer, const char *comment)
 // c = count, f = file
 static char * write_cond(const char *fmt, int *c, const char *f, bool *free)
 {
-		char *line = calloc(1, strlen(fmt) + 128);
+	char *line = calloc(1, strlen(fmt) + 128);
 
-		if (!line)
-			return NULL;
+	if (!line)
+		return NULL;
 
-		sprintf(line, fmt, f, *c, f, *c, f, *c, f, *c);
+	sprintf(line, fmt, f, *c, f, *c, f, *c, f, *c);
 
-		*c = *c + 1;
+	*c = *c + 1;
 
-		*free = true;
+	*free = true;
 
-		return line;
+	return line;
 }
 
 int write_arithmetic(struct writer *writer, enum arithmetic_t type)

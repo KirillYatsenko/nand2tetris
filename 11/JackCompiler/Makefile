@@ -1,4 +1,4 @@
-SRCS := main.c tokenizer.c compilation-engine.c symbol-table.c vm-writer.c
+SRCS := main.c tokenizer.c compiler.c symbol-table.c vm-writer.c
 OUT := compiler
 
 .PHONY: all clean

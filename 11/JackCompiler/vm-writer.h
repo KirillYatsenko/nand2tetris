@@ -11,8 +11,8 @@ struct vm_writer {
 };
 
 enum segment {
-	S_CONSTANT = 0,
-	S_ARGUMENT,
+	S_CONST = 0,
+	S_ARG,
 	S_LOCAL,
 	S_STATIC,
 	S_THIS,
@@ -28,11 +28,12 @@ void vm_writer_deinit(struct vm_writer *writer);
 int write_push(struct vm_writer *writer, enum segment segment, int indx);
 int write_pop(struct vm_writer *writer, enum segment segment, int indx);
 int write_arithmetic(struct vm_writer *writer, enum token_t command);
-int write_label(struct vm_writer *writer, const char *name);
-int write_goto(struct vm_writer *writer, const char *name);
-int write_if(struct vm_writer *writer, const char *name);
+int write_label(struct vm_writer *writer, const char *name, int indx);
+int write_goto(struct vm_writer *writer, const char *label, int indx);
+int write_if(struct vm_writer *writer, const char *label, int indx);
 int write_call(struct vm_writer *writer, const char *name, int nargs);
-int write_function(struct vm_writer *writer, const char *name, int nvars);
+int write_function(struct vm_writer *writer, const char *className,
+		   const char *name, int nvars);
 int write_return(struct vm_writer *writer);
 
 #endif /* VM_WRITER_H */

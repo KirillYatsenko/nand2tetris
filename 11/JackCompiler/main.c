@@ -8,7 +8,7 @@
 #include <dirent.h>
 #include <libgen.h>
 
-#include "compilation-engine.h"
+#include "compiler.h"
 
 #define MAX_FILES	100
 
@@ -74,7 +74,8 @@ int main(int argc, char *argv[])
 	int rc;
 	char **files;
 	size_t files_size, i;
-	struct compilation_engine *engine;
+	struct compiler *engine;
+	int while_indx = 0, if_indx = 0;
 
 	if (argc == 1) {
 		print_usage(argv[0]);
@@ -88,7 +89,7 @@ int main(int argc, char *argv[])
 	}
 
 	for (i = 0; i < files_size; i++) {
-		engine = compilation_engine_init(files[i]);
+		engine = compiler_init(files[i], while_indx, if_indx);
 		if (!engine) {
 			printf("Unable to init compilation engine\n");
 			return -EFAULT;
@@ -97,11 +98,14 @@ int main(int argc, char *argv[])
 		rc = compile(engine);
 		if (rc) {
 			printf("Unable to compile: '%s'\n", files[i]);
-			compilation_engine_deinit(engine);
+			compiler_deinit(engine);
 			break;
 		}
 
-		compilation_engine_deinit(engine);
+		while_indx = engine->while_indx;
+		if_indx = engine->if_indx;
+
+		compiler_deinit(engine);
 	}
 
 	return rc;

@@ -1,0 +1,67 @@
+[
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-Wall",
+            "-o",
+            "compiler",
+            "vm-writer.c"
+        ],
+        "directory": "/home/kirill-yatsenko/Documents/learn/nand2tetris/projects/11/JackCompiler",
+        "file": "vm-writer.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-Wall",
+            "-o",
+            "compiler",
+            "tokenizer.c"
+        ],
+        "directory": "/home/kirill-yatsenko/Documents/learn/nand2tetris/projects/11/JackCompiler",
+        "file": "tokenizer.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-Wall",
+            "-o",
+            "compiler",
+            "compiler.c"
+        ],
+        "directory": "/home/kirill-yatsenko/Documents/learn/nand2tetris/projects/11/JackCompiler",
+        "file": "compiler.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-Wall",
+            "-o",
+            "compiler",
+            "main.c"
+        ],
+        "directory": "/home/kirill-yatsenko/Documents/learn/nand2tetris/projects/11/JackCompiler",
+        "file": "main.c"
+    },
+    {
+        "arguments": [
+            "gcc",
+            "-c",
+            "-g",
+            "-Wall",
+            "-o",
+            "compiler",
+            "symbol-table.c"
+        ],
+        "directory": "/home/kirill-yatsenko/Documents/learn/nand2tetris/projects/11/JackCompiler",
+        "file": "symbol-table.c"
+    }
+]
