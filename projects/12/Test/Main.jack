@@ -1,0 +1,25 @@
+class Main {
+    function void main() {
+    	var int mult, div;
+
+	do Output.printInt(10 * 14);
+	do Output.println();
+
+	do Output.printInt(1 * 0);
+	do Output.println();
+
+	do Output.printInt(100 * 15);
+	do Output.println();
+
+	do Output.printInt(16 / 3);
+	do Output.println();
+
+	do Output.printInt(Math.abs(11));
+	do Output.println();
+
+	do Output.printInt(Math.sqrt(25));
+	do Output.println();
+
+        return;
+    }
+}

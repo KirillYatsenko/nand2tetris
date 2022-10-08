@@ -1,6 +1,0 @@
-// some comment
-push constant 1
-push constant 10
-eq
-gt
-lt
