@@ -12,53 +12,153 @@
  */
 class String {
 
+    field Array arr;
+    field int len;
+    field int maxLen;
+
     /** constructs a new empty string with a maximum length of maxLength
      *  and initial length of 0. */
     constructor String new(int maxLength) {
+        if (maxLength = 0) {
+		let maxLength = 1;
+	}
+
+    	let arr = Array.new(maxLength);
+
+	let len = 0;
+	let maxLen = maxLength;
+
+	return this;
     }
 
     /** Disposes this string. */
     method void dispose() {
+    	do arr.dispose();
+	return;
     }
 
     /** Returns the current length of this string. */
     method int length() {
+	return len;
     }
 
     /** Returns the character at the j-th location of this string. */
     method char charAt(int j) {
+    	if ((j > maxLen) | (j = maxLen)) {
+		do Output.printString("charAt out of range");
+		do Sys.error(-1);
+	}
+
+	return arr[j];
     }
 
     /** Sets the character at the j-th location of this string to c. */
     method void setCharAt(int j, char c) {
+    	if ((j > maxLen) | (j = maxLen)) {
+		do Output.printString("setCharAt out of range");
+		do Sys.error(-1);
+	}
+
+	let arr[j] = c;
+
+	return;
     }
 
     /** Appends c to this string's end and returns this string. */
     method String appendChar(char c) {
+	if (len = maxLen) {
+		do Output.printString("appendChar not enought space");
+		do Sys.error(-1);
+	}
+
+	let arr[len] = c;
+	let len = len + 1;
+
+	return this;
     }
 
     /** Erases the last character from this string. */
     method void eraseLastChar() {
+    	if (~(len = 0)) {
+		let len = len - 1;
+	}
+
+	return;
     }
 
     /** Returns the integer value of this string, 
      *  until a non-digit character is detected. */
     method int intValue() {
+    	var int i, sum;
+	var bool neg;
+
+	let i = 0;
+	let sum = 0;
+	let neg = false;
+
+	while (~(i = len)) {
+		if (charAt(i) = 45) { // 45 - '-' ASCII code
+			let neg = true;
+		} else {
+			let sum = (sum * 10) + (charAt(i) - 48);
+		}
+
+		let i = i + 1;
+	}
+
+	if (neg) {
+		let sum = -sum;
+	}
+
+    	return sum;
+    }
+
+    /** setInt helper function */
+    method String int2string(int val) {
+        var int lastDigit;
+
+	// mod operation, better to move it to Math class, but API is already defined
+	let lastDigit = val - (10 * (val / 10));
+	let lastDigit = lastDigit + 48; // 48 - '0' ASCII code
+
+	if (val < 10) {
+		return appendChar(lastDigit);
+	} else {
+		do int2string(val / 10);
+		return appendChar(lastDigit);
+	}
     }
 
     /** Sets this string to hold a representation of the given value. */
     method void setInt(int val) {
+	if (maxLen < 6) {
+		do Output.printString("Potentially small string");
+		do Sys.error(-1);
+	}
+
+	let len = 0;
+	if (val < 0) {
+		do appendChar(45); // 45 - '-' ASCII code
+		let val = Math.abs(val);
+	}
+
+	do int2string(val);
+
+	return;
     }
 
     /** Returns the new line character. */
     function char newLine() {
+    	return 128;
     }
 
     /** Returns the backspace character. */
     function char backSpace() {
+    	return 129;
     }
 
     /** Returns the double quote (") character. */
     function char doubleQuote() {
+    	return 34;
     }
 }
