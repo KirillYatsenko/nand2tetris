@@ -7,28 +7,106 @@
  * This library provides two services: direct access to the computer's main
  * memory (RAM), and allocation and recycling of memory blocks. The Hack RAM
  * consists of 32,768 words, each holding a 16-bit binary number.
- */ 
+ */
 class Memory {
+    static Array ram;
+    static int freeListHead;
+    static int freeListTail;
 
     /** Initializes the class. */
     function void init() {
+    	let ram = 0;
+
+	let freeListHead = 2048; // heap location
+	let freeListTail = freeListHead;
+
+	// 2048..16383 - heap address space
+	// 2 words occupies size and next elem pointer fields
+	do Memory.setElemSize(freeListHead, 16383 - 2048 - 2);
+	do Memory.setElemNext(freeListHead, null); // end of the list
+
+	return;
+    }
+
+    function int getElemSize(int elemPtr) {
+    	return Memory.peek(elemPtr);
+    }
+
+    function void setElemSize(int elemPtr, int size) {
+	do Memory.poke(elemPtr, size);
+	return;
+    }
+
+    function int getElemNext(int elemPtr) {
+    	return Memory.peek(elemPtr + 1);
+    }
+
+    function void setElemNext(int elemPtr, int nextPtr) {
+	do Memory.poke(elemPtr + 1, nextPtr);
+	return;
     }
 
     /** Returns the RAM value at the given address. */
     function int peek(int address) {
+    	return ram[address];
     }
 
     /** Sets the RAM value at the given address to the given value. */
     function void poke(int address, int value) {
+    	let ram[address] = value;
+	return;
     }
 
     /** Finds an available RAM block of the given size and returns
      *  a reference to its base address. */
     function int alloc(int size) {
+    	var int curElem, curSize, newElem;
+	var bool search, found;
+
+	let search = true;
+	let found = false;
+	let curElem = freeListHead;
+
+	while (search) {
+		let curSize = Memory.getElemSize(curElem);
+
+		if ((curSize > (size + 2)) | (curSize = (size + 2))) {
+			let search = false;
+			let found = true;
+		} else {
+			let curElem = Memory.getElemNext(curElem);
+			if (curElem = 0) {
+				// no more elems
+				let search = false;
+			}
+		}
+	}
+
+	if (~found) {
+		do Output.printString("Out of memory");
+		do Sys.error(-1);
+	}
+
+	// allocate new elem
+	let newElem = curElem + curSize - size - 2;
+	do Memory.setElemSize(newElem, size);
+	do Memory.setElemNext(newElem, null);
+
+	// reduce selected elem size
+	do Memory.setElemSize(curElem, curSize - size - 2);
+
+	return newElem + 2; // return base user address
     }
 
     /** De-allocates the given object (cast as an array) by making
      *  it available for future allocations. */
     function void deAlloc(Array o) {
-    }    
+    	var int o_base;
+	let o_base = o - 2;
+
+	do Memory.setElemNext(freeListTail, o_base);
+	let freeListTail = o_base;
+
+	return;
+    }
 }
