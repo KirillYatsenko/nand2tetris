@@ -7,10 +7,14 @@
  * A library for handling user input from the keyboard.
  */
 class Keyboard {
+    static int base, cursor;
 
     /** Initializes the keyboard. */
     function void init() {
-    } 
+    	let base = 24576;
+	let cursor = 60; // less arrow
+	return;
+    }
 
     /**
      * Returns the character of the currently pressed key on the keyboard;
@@ -33,30 +37,73 @@ class Keyboard {
      * F1 - F12 = 141 - 152
      */
     function char keyPressed() {
+    	return Memory.peek(base);
     }
 
-    /**								
+    /**
      * Waits until a key is pressed on the keyboard and released,
-     * then echoes the key to the screen, and returns the character 
+     * then echoes the key to the screen, and returns the character
      * of the pressed key.
      */
     function char readChar() {
+	var char c;
+	do Output.printChar(cursor); // display cursor
+
+	while (Keyboard.keyPressed() = 0) {
+		do Sys.wait(10);
+	}
+
+	let c = Keyboard.keyPressed();
+
+	while (~(Keyboard.keyPressed() = 0)) {
+		do Sys.wait(10);
+	}
+
+	do Output.backSpace();
+	do Output.printChar(c);
+
+	return c;
     }
 
-    /**								
+    /**
      * Displays the message on the screen, reads from the keyboard the entered
      * text until a newline character is detected, echoes the text to the screen,
      * and returns its value. Also handles user backspaces.
      */
     function String readLine(String message) {
-    }   
+	var char c;
+	var String str;
+	do Output.printString(message);
 
-    /**								
+	let str = String.new(64);
+
+	while (true) {
+		let c = Keyboard.readChar();
+		if (c = 128) { // newline
+			do Output.println();
+			return str;
+		}
+
+		if (c = 129) { // backspace
+			do str.eraseLastChar();
+		} else {
+			do str.appendChar(c);
+		}
+	}
+
+    	return null;
+    }
+
+    /**
      * Displays the message on the screen, reads from the keyboard the entered
      * text until a newline character is detected, echoes the text to the screen,
      * and returns its integer value (until the first non-digit character in the
-     * entered text is detected). Also handles user backspaces. 
+     * entered text is detected). Also handles user backspaces.
      */
     function int readInt(String message) {
+	var String str;
+	let str = Keyboard.readLine(message);
+
+	return str.intValue();
     }
 }
